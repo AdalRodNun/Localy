@@ -27,31 +27,13 @@ class MIS_SERVICIOS_ACTIVITY : AppCompatActivity(), View.OnClickListener {
 
         recyclerView = findViewById(R.id.recyclerViewMios)
 
-        leerProductos()
+        leerIDs()
     }
 
     @Override
     override fun onResume() {
         super.onResume()
-        leerProductos()
-    }
-
-    fun leerProductos(){
-        serviciosData.clear()
         leerIDs()
-        Firebase.firestore.collection("servicios")
-            .get()
-            .addOnSuccessListener {
-                for (documento in it) {
-                    if(misServiciosIDs.contains(documento.id)){
-                        leerImagenProductos(documento.id, documento.data["nombre"].toString())
-                    }
-                }
-
-            }
-            .addOnFailureListener() {
-                Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
-            }
     }
 
     fun leerIDs(){
@@ -63,12 +45,32 @@ class MIS_SERVICIOS_ACTIVITY : AppCompatActivity(), View.OnClickListener {
                 for (documento in it) {
                     if(documento.data["user id"] == idUsuario) {
                         misServiciosIDs = documento.data["mis servicios"] as ArrayList<String>
+                        leerProductos()
                         break
                     }
                 }
             }
             .addOnFailureListener {
                 Log.e("FIRESTORE Menu", "Error al leer usuario: ${it.message}")
+            }
+    }
+
+    fun leerProductos(){
+        serviciosData.clear()
+        Firebase.firestore.collection("servicios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(misServiciosIDs.contains(documento.id)){
+                        leerImagenProductos(documento.id, documento.data["nombre"].toString())
+                    } else if (misServiciosIDs.isEmpty()){
+                        iniciarRecycler()
+                    }
+                }
+
+            }
+            .addOnFailureListener() {
+                Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
             }
     }
 
@@ -111,4 +113,6 @@ class MIS_SERVICIOS_ACTIVITY : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, Agregar_Servicio_Activity::class.java)
         startActivity(intent)
     }
+
+
 }

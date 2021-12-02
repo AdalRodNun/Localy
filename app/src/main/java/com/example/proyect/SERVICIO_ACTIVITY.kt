@@ -23,6 +23,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
     lateinit var borrarBoton : AppCompatImageButton
     lateinit var usuario : String
     lateinit var idServicio : String
+    lateinit var favoritoBoton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         productos = findViewById(R.id.productos_text)
         editarBoton = findViewById(R.id.editButton)
         borrarBoton = findViewById(R.id.deleteButton)
+        favoritoBoton = findViewById(R.id.favoritoBoton)
 
         idServicio = intent.getStringExtra("id").toString()
 
@@ -57,6 +59,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                         latitud = documento.data["latitud"].toString()
                         longitud = documento.data["longitud"].toString()
                         usuario = documento.data["usuario"].toString()
+                        cargarBoton()
                         break
                     }
                 }
@@ -86,13 +89,13 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
 
     fun borrarUsuarioID(view: View){
         var misServicios: ArrayList<String>
-        val usuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         Firebase.firestore.collection("usuarios")
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-                    if(documento.data["user id"] == usuario) {
+                    if(documento.data["user id"] == idUsuario) {
                         misServicios = documento.data["mis servicios"] as ArrayList<String>
                         misServicios.remove(idServicio)
 
@@ -129,5 +132,64 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         intent.putExtra("latitud", latitud)
         intent.putExtra("longitud", longitud)
         startActivity(intent)
+    }
+
+    fun cargarBoton(){
+        var serviciosFavoritos: ArrayList<String>
+        val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        Firebase.firestore.collection("usuarios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(documento.data["user id"] == idUsuario) {
+                        serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
+
+                        if (serviciosFavoritos.contains(idServicio)) {
+                            favoritoBoton.setText("Eliminar de favoritos")
+                        } else {
+                            favoritoBoton.setText("Añadir a favoritos")
+                        }
+                    }
+                    break
+                }
+            }
+            .addOnFailureListener {
+                Log.e("FIRESTORE Platillo", "error al leer usuarios: ${it.message}")
+            }
+    }
+
+    fun agregarEliminarFavoritos(v : View){
+        var serviciosFavoritos: ArrayList<String>
+        val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        Firebase.firestore.collection("usuarios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(documento.data["user id"] == idUsuario){
+                        serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
+                        if (!serviciosFavoritos.contains(idServicio)) {
+                            serviciosFavoritos.add(idServicio)
+                            favoritoBoton.setText("Eliminar de favoritos")
+
+                            Toast.makeText(this, "Platillo guardado", Toast.LENGTH_SHORT).show()
+                        } else {
+                            serviciosFavoritos.remove(idServicio)
+                            favoritoBoton.setText("Añadir a favoritos")
+
+                            Toast.makeText(this, "Platillo eliminado de favoritos", Toast.LENGTH_SHORT).show()
+                        }
+
+                        Firebase.firestore.collection("usuarios").document(documento.id).update(
+                            mapOf("servicios guardados" to serviciosFavoritos)
+                        )
+                    }
+                    break
+                }
+            }
+            .addOnFailureListener {
+                Log.e("FIRESTORE Platillo", "error al leer servicios: ${it.message}")
+            }
     }
 }
