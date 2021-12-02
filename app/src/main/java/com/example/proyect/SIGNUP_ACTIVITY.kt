@@ -52,6 +52,7 @@ class SIGNUP_ACTIVITY : AppCompatActivity() {
     }
 
     fun registroExtra() {
+        //hola :)
         val usuario = hashMapOf(
             "user id" to FirebaseAuth.getInstance().currentUser?.uid.toString(),
             "mis servicios" to arrayListOf<String>(),
