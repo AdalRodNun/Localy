@@ -145,6 +145,7 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
                         )
 
                         registrarImagen(idNuevo)
+                        break
                     }
                 }
             }

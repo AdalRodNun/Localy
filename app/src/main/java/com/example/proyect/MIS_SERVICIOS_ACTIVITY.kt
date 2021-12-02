@@ -63,6 +63,7 @@ class MIS_SERVICIOS_ACTIVITY : AppCompatActivity(), View.OnClickListener {
                 for (documento in it) {
                     if(documento.data["user id"] == idUsuario) {
                         misServiciosIDs = documento.data["mis servicios"] as ArrayList<String>
+                        break
                     }
                 }
             }

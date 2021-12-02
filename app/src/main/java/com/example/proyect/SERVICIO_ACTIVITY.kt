@@ -57,6 +57,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                         latitud = documento.data["latitud"].toString()
                         longitud = documento.data["longitud"].toString()
                         usuario = documento.data["usuario"].toString()
+                        break
                     }
                 }
 
@@ -100,6 +101,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                         )
 
                         borrar()
+                        break
                     }
                 }
             }
