@@ -85,8 +85,6 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
     }
 
     fun registrarDatos() {
-        var idNuevo : String
-
         val servicio = hashMapOf(
             "nombre" to nombre.text.toString(),
             "informacion servicio" to informacion.text.toString(),
@@ -102,9 +100,8 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
 
                 Toast.makeText(this, "Servicio agregado", Toast.LENGTH_SHORT).show();
                 registroExtra(it.id)
-                registrarImagen(it.id)
                 Log.d("FIREBASE", "id: ${it.id}")
-                finish()
+                //finish
             }
             .addOnFailureListener {
 
@@ -123,6 +120,7 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
             .addOnSuccessListener {
 
                 Log.d("FIREBASE", "Correctamente cargado")
+                finish()
             }
             .addOnFailureListener {
 
@@ -145,6 +143,8 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
                         Firebase.firestore.collection("usuarios").document(documento.id).update(
                             mapOf("mis servicios" to misServicios)
                         )
+
+                        registrarImagen(idNuevo)
                     }
                 }
             }

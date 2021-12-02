@@ -39,6 +39,12 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         cargarDatos()
     }
 
+    @Override
+    override fun onResume() {
+        super.onResume()
+        cargarDatos()
+    }
+
     fun cargarDatos(){
         Firebase.firestore.collection("servicios")
             .get()
@@ -64,8 +70,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun borrar(view: View) {
-        borrarUsuarioID()
+    fun borrar() {
         Firebase.firestore.collection("servicios").document(idServicio)
             .delete()
             .addOnSuccessListener {
@@ -78,7 +83,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun borrarUsuarioID(){
+    fun borrarUsuarioID(view: View){
         var misServicios: ArrayList<String>
         val usuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -93,6 +98,8 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                         Firebase.firestore.collection("usuarios").document(documento.id).update(
                             mapOf("mis servicios" to misServicios)
                         )
+
+                        borrar()
                     }
                 }
             }
