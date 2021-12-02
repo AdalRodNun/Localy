@@ -20,6 +20,7 @@ class MIS_SERVICIOS_ACTIVITY : AppCompatActivity(), View.OnClickListener {
     lateinit var adapter : Servicio_Adapter
     lateinit var misServiciosIDs : ArrayList<String>
     var serviciosData : ArrayList<Servicio> = ArrayList()
+    var bandera : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,9 @@ class MIS_SERVICIOS_ACTIVITY : AppCompatActivity(), View.OnClickListener {
     @Override
     override fun onResume() {
         super.onResume()
-        leerIDs()
+        if (bandera) {
+            leerIDs()
+        }
     }
 
     fun leerIDs(){
@@ -99,6 +102,10 @@ class MIS_SERVICIOS_ACTIVITY : AppCompatActivity(), View.OnClickListener {
 
         recyclerView.layoutManager = llm
         recyclerView.adapter = adapter
+
+        if(!bandera){
+            bandera = true
+        }
     }
 
     override fun onClick(row: View) {

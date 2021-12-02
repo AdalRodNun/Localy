@@ -21,7 +21,7 @@ class HOME_ACTIVITY : AppCompatActivity(), View.OnClickListener {
     lateinit var adapter : Servicio_Adapter
     lateinit var botonMenu : AppCompatImageButton
     var serviciosData : ArrayList<Servicio> = ArrayList()
-
+    var bandera : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,9 @@ class HOME_ACTIVITY : AppCompatActivity(), View.OnClickListener {
     @Override
     override fun onResume() {
         super.onResume()
-        leerProductos()
+        if (bandera) {
+            leerProductos()
+        }
     }
 
     fun leerProductos(){
@@ -78,6 +80,10 @@ class HOME_ACTIVITY : AppCompatActivity(), View.OnClickListener {
 
         recyclerView.layoutManager = llm
         recyclerView.adapter = adapter
+
+        if(!bandera){
+            bandera = true
+        }
     }
 
     fun buscar(view: View){

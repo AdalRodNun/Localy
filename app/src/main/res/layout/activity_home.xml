@@ -64,6 +64,7 @@
         android:layout_marginTop="56dp"
         android:layout_marginEnd="30dp"
         android:background="#00FFFFFF"
+        android:onClick="buscar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.68"
         app:layout_constraintStart_toEndOf="@+id/search_bar"

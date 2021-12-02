@@ -24,6 +24,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
     lateinit var usuario : String
     lateinit var idServicio : String
     lateinit var favoritoBoton : Button
+    var bandera : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +45,9 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
     @Override
     override fun onResume() {
         super.onResume()
-        cargarDatos()
+        if (bandera) {
+            cargarDatos()
+        }
     }
 
     fun cargarDatos(){
@@ -176,6 +179,11 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                             favoritoBoton.setText("Añadir a favoritos")
                         }
                     }
+
+                    if(!bandera){
+                        bandera = true
+                    }
+
                     break
                 }
             }
