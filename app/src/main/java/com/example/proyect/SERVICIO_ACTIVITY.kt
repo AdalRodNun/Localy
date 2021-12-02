@@ -74,19 +74,6 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun borrar() {
-        Firebase.firestore.collection("servicios").document(idServicio)
-            .delete()
-            .addOnSuccessListener {
-                Log.d("FIREBASE", "Documento borrado")
-                Toast.makeText(this, "Servicio eliminado", Toast.LENGTH_SHORT).show();
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Log.w("FIREBASE", "Error al borrar documento", e)
-            }
-    }
-
     fun borrarUsuarioID(view: View){
         var misServicios: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -103,13 +90,51 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                             mapOf("mis servicios" to misServicios)
                         )
 
-                        borrar()
+                        borrarDeFavoritos()
                         break
                     }
                 }
             }
             .addOnFailureListener {
                 Log.e("FIRESTORE", "Error al eliminar id servicio en usuario: ${it.message}")
+            }
+    }
+
+    fun borrarDeFavoritos(){
+        var serviciosFavoritos : ArrayList<String>
+        val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        Firebase.firestore.collection("usuarios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
+
+                    if(serviciosFavoritos.contains(idServicio)){
+                        serviciosFavoritos.remove(idServicio)
+
+                        Firebase.firestore.collection("usuarios").document(documento.id).update(
+                            mapOf("servicios guardados" to serviciosFavoritos)
+                        )
+                    }
+                }
+                borrar()
+            }
+            .addOnFailureListener {
+                Log.e("FIRESTORE", "Error al eliminar id servicio en usuario: ${it.message}")
+            }
+    }
+
+    fun borrar() {
+        Firebase.firestore.collection("servicios").document(idServicio)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("FIREBASE", "Documento borrado")
+                Toast.makeText(this, "Servicio eliminado", Toast.LENGTH_SHORT).show();
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Log.w("FIREBASE", "Error al borrar documento", e)
             }
     }
 
@@ -155,7 +180,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                 }
             }
             .addOnFailureListener {
-                Log.e("FIRESTORE Platillo", "error al leer usuarios: ${it.message}")
+                Log.e("FIRESTORE", "error al leer usuarios: ${it.message}")
             }
     }
 
@@ -173,12 +198,12 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                             serviciosFavoritos.add(idServicio)
                             favoritoBoton.setText("Eliminar de favoritos")
 
-                            Toast.makeText(this, "Platillo guardado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Servicio guardado", Toast.LENGTH_SHORT).show()
                         } else {
                             serviciosFavoritos.remove(idServicio)
                             favoritoBoton.setText("Añadir a favoritos")
 
-                            Toast.makeText(this, "Platillo eliminado de favoritos", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Servicio eliminado de favoritos", Toast.LENGTH_SHORT).show()
                         }
 
                         Firebase.firestore.collection("usuarios").document(documento.id).update(
@@ -189,7 +214,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                 }
             }
             .addOnFailureListener {
-                Log.e("FIRESTORE Platillo", "error al leer servicios: ${it.message}")
+                Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
             }
     }
 }
