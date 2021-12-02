@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null){
-            val intent = Intent(this, MENU_ACTIVITY::class.java)
+            val intent = Intent(this, HOME_ACTIVITY::class.java)
             startActivity(intent)
         }
     }

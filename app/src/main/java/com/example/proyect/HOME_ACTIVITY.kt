@@ -6,10 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -17,55 +18,52 @@ import java.io.File
 
 class HOME_ACTIVITY : AppCompatActivity(), View.OnClickListener {
     lateinit var recyclerView: RecyclerView
+    lateinit var adapter : Servicio_Adapter
+    lateinit var botonMenu : AppCompatImageButton
     var serviciosData : ArrayList<Servicio> = ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        botonMenu = findViewById(R.id.opciones_button)
         recyclerView = findViewById(R.id.recyclerViewServicios)
 
         leerProductos()
     }
 
-    fun reloadProductos(view: View){
-        serviciosData.clear()
+    @Override
+    override fun onResume() {
+        super.onResume()
         leerProductos()
     }
 
     fun leerProductos(){
+        serviciosData.clear()
         Firebase.firestore.collection("servicios")
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-
-                    leerImagenProductos(documento.id, documento.data["nombre"].toString(), documento.data["usuario"].toString(),
-                    documento.data["productos"].toString(), documento.data["informacion servicio"].toString(),
-                    documento.data["latitud"].toString(), documento.data["longitud"].toString())
+                    leerImagenProductos(documento.id, documento.data["nombre"].toString())
                 }
-                //iniciarRecycler()
             }
             .addOnFailureListener() {
                 Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
             }
     }
 
-    fun leerImagenProductos(nombreImagen : String, nombre : String, usuario : String, productos : String, informacion : String, latitud : String, longitud : String){
+    fun leerImagenProductos(nombreImagen : String, nombreServicio : String){
         val storageReference = FirebaseStorage.getInstance().getReference("imagenesServicios/$nombreImagen")
         val localfile = File.createTempFile("imagenTemporal", "jpg")
 
         storageReference.getFile(localfile)
             .addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-                serviciosData.add(Servicio(nombre, bitmap, usuario, productos, informacion, latitud, longitud, nombreImagen))
+                serviciosData.add(Servicio(nombreServicio, nombreImagen, bitmap))
                 Log.d("FIREBASE", "Correctamente cargado")
 
-                val adapter = Servicio_Adapter(serviciosData, this)
-                var llm = LinearLayoutManager(this)
-                llm.orientation = LinearLayoutManager.VERTICAL
-
-                recyclerView.layoutManager = llm
-                recyclerView.adapter = adapter
+                iniciarRecycler()
             }
             .addOnFailureListener {
 
@@ -74,27 +72,50 @@ class HOME_ACTIVITY : AppCompatActivity(), View.OnClickListener {
     }
 
     fun iniciarRecycler(){
+        adapter = Servicio_Adapter(serviciosData, this)
+        var llm = LinearLayoutManager(this)
+        llm.orientation = LinearLayoutManager.VERTICAL
 
-    }
-
-    fun gotoMenu(view: View){
-        val intent = Intent(this, MENU_ACTIVITY::class.java)
-        startActivity(intent)
+        recyclerView.layoutManager = llm
+        recyclerView.adapter = adapter
     }
 
     fun buscar(view: View){
-        val intent = Intent(this, MapsActivity::class.java)
-        startActivity(intent)
+
+    }
+
+    fun popupMenu (view: View){
+        val popupMenu = PopupMenu(this, botonMenu)
+        popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { item ->
+            val idActividad = item.title.toString()
+
+            when (idActividad) {
+                "Mis servicios" -> {
+                    val intent = Intent(this, MIS_SERVICIOS_ACTIVITY::class.java)
+                    startActivity(intent)
+                }
+                "Servicios guardados" -> {
+                    val intent = Intent(this, SERVICIOS_GUARDADOS_ACTIVITY::class.java)
+                    startActivity(intent)
+                }
+                "Cerrar sesión" -> {
+                    Firebase.auth.signOut()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            true
+        }
+        popupMenu.show()
     }
 
     override fun onClick(row : View) {
         val position = recyclerView.getChildLayoutPosition(row)
         val intent = Intent(this, SERVICIO_ACTIVITY::class.java)
-        intent.putExtra("nombre", serviciosData[position].nombreServicio.toString())
-        intent.putExtra("productos", serviciosData[position].productos.toString())
-        intent.putExtra("informacion", serviciosData[position].informacion.toString())
-        intent.putExtra("latitud", serviciosData[position].latitud.toString())
-        intent.putExtra("longitud", serviciosData[position].longitud.toString())
+        intent.putExtra("id", serviciosData[position].idServicio)
         //intent.putExtra("usuario", serviciosData[position].idusuario.toString())
         startActivity(intent)
     }

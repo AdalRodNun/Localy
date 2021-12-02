@@ -54,9 +54,11 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
         imagen = findViewById(R.id.agregarImagenServicio)
 
         buscarImagen = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            imagenUri = it
-            imagen.setImageURI(imagenUri)
-            imagenEmpty = false
+            if(it != null) {
+                imagenUri = it
+                imagen.setImageURI(imagenUri)
+                imagenEmpty = false
+            }
         }
     }
 
@@ -83,6 +85,8 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
     }
 
     fun registrarDatos() {
+        var idNuevo : String
+
         val servicio = hashMapOf(
             "nombre" to nombre.text.toString(),
             "informacion servicio" to informacion.text.toString(),
@@ -97,6 +101,7 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
             .addOnSuccessListener {
 
                 Toast.makeText(this, "Servicio agregado", Toast.LENGTH_SHORT).show();
+                registroExtra(it.id)
                 registrarImagen(it.id)
                 Log.d("FIREBASE", "id: ${it.id}")
                 finish()
@@ -122,6 +127,29 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
             .addOnFailureListener {
 
                 Log.e("FIREBASE", "exception: ${it.message}")
+            }
+    }
+
+    fun registroExtra(idNuevo : String){
+        var misServicios: ArrayList<String>
+        var idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        Firebase.firestore.collection("usuarios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(documento.data["user id"] == idUsuario){
+                        misServicios = documento.data["mis servicios"] as ArrayList<String>
+                        misServicios.add(idNuevo)
+
+                        Firebase.firestore.collection("usuarios").document(documento.id).update(
+                            mapOf("mis servicios" to misServicios)
+                        )
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Log.e("FIRESTORE", "Error al registrar servicio: ${it.message}")
             }
     }
 

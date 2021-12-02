@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class SIGNUP_ACTIVITY : AppCompatActivity() {
@@ -23,19 +25,49 @@ class SIGNUP_ACTIVITY : AppCompatActivity() {
         password = findViewById(R.id.password_edit_text_signup)
     }
 
-    fun registro(view : View?){
+    fun revisarCampos(v : View) {
+        if(email.text.toString().isEmpty()){
+            Toast.makeText(this, "Falta agregar el correo electronico", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if(password.text.toString().isEmpty()){
+            Toast.makeText(this, "Falta agregar la contraseña", Toast.LENGTH_SHORT).show()
+            return
+        }
+        registro()
+    }
+
+    fun registro(){
         Firebase.auth.createUserWithEmailAndPassword(
             email.text.toString(),
             password.text.toString()).addOnCompleteListener(this){
 
             if(it.isSuccessful){
                 Log.d("FIREBASE", "Registro exitoso")
-                val intent = Intent(this, HOME_ACTIVITY::class.java)
-                startActivity(intent)
+                registroExtra()
             } else {
                 Log.e("FIREBASE", "Registro fracasó: ${it.exception?.message}")
-                Toast.makeText(this, "Correo ya registrado o es incorrecto", Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()            }
         }
+    }
+
+    fun registroExtra() {
+        val usuario = hashMapOf(
+            "user id" to FirebaseAuth.getInstance().currentUser?.uid.toString(),
+            "mis servicios" to arrayListOf<String>(),
+            "servicios guardados" to arrayListOf<String>()
+        )
+
+        Firebase.firestore.collection("usuarios")
+            .add(usuario)
+            .addOnSuccessListener {
+                Log.d("FIREBASE", "id: ${it.id}")
+                val intent = Intent(this, HOME_ACTIVITY::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                Log.e("FIREBASE", "exception: ${it.message}")
+            }
     }
 }

@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyect">
         <activity
+            android:name=".SERVICIOS_GUARDADOS_ACTIVITY"
+            android:exported="true" />
+        <activity
             android:name=".Modificar_Servicio_Activity"
             android:exported="true" />
         <!--
@@ -42,7 +45,7 @@
             android:name=".Agregar_Servicio_Activity"
             android:exported="true" />
         <activity
-            android:name=".MENU_ACTIVITY"
+            android:name=".MIS_SERVICIOS_ACTIVITY"
             android:exported="true" />
         <activity
             android:name=".Detalle_registro_activity"

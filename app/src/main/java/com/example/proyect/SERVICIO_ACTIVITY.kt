@@ -22,7 +22,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
     lateinit var editarBoton : AppCompatImageButton
     lateinit var borrarBoton : AppCompatImageButton
     lateinit var usuario : String
-    lateinit var idservicio : String
+    lateinit var idServicio : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,23 +34,39 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         editarBoton = findViewById(R.id.editButton)
         borrarBoton = findViewById(R.id.deleteButton)
 
-        nombre.text = intent.getStringExtra("nombre")
-        infoServicio.text = intent.getStringExtra("informacion")
-        productos.text = intent.getStringExtra("productos")
-        latitud = intent.getStringExtra("latitud").toString()
-        longitud = intent.getStringExtra("longitud").toString()
-        usuario = intent.getStringExtra("usuario").toString()
-        idservicio = intent.getStringExtra("id").toString()
+        idServicio = intent.getStringExtra("id").toString()
 
-        if(FirebaseAuth.getInstance().currentUser?.uid.toString() != intent.getStringExtra("usuario")){
-            editarBoton.visibility = View.GONE
-            borrarBoton.visibility = View.GONE
-        }
+        cargarDatos()
     }
 
-    fun borrar(view: View){
-        var id = intent.getStringExtra("id").toString()
-        Firebase.firestore.collection("servicios").document(id)
+    fun cargarDatos(){
+        Firebase.firestore.collection("servicios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(documento.id == idServicio){
+                        infoServicio.text = documento.data["informacion servicio"].toString()
+                        nombre.text = documento.data["nombre"].toString()
+                        productos.text = documento.data["productos"].toString()
+                        latitud = documento.data["latitud"].toString()
+                        longitud = documento.data["longitud"].toString()
+                        usuario = documento.data["usuario"].toString()
+                    }
+                }
+
+                if(FirebaseAuth.getInstance().currentUser?.uid.toString() != usuario){
+                    editarBoton.visibility = View.GONE
+                    borrarBoton.visibility = View.GONE
+                }
+            }
+            .addOnFailureListener() {
+                Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
+            }
+    }
+
+    fun borrar(view: View) {
+        borrarUsuarioID()
+        Firebase.firestore.collection("servicios").document(idServicio)
             .delete()
             .addOnSuccessListener {
                 Log.d("FIREBASE", "Documento borrado")
@@ -62,6 +78,29 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
+    fun borrarUsuarioID(){
+        var misServicios: ArrayList<String>
+        val usuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+        Firebase.firestore.collection("usuarios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(documento.data["user id"] == usuario) {
+                        misServicios = documento.data["mis servicios"] as ArrayList<String>
+                        misServicios.remove(idServicio)
+
+                        Firebase.firestore.collection("usuarios").document(documento.id).update(
+                            mapOf("mis servicios" to misServicios)
+                        )
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Log.e("FIRESTORE", "Error al eliminar id servicio en usuario: ${it.message}")
+            }
+    }
+
     fun editar(view: View){
         val intent = Intent(this, Modificar_Servicio_Activity::class.java)
         intent.putExtra("nombre", nombre.text.toString())
@@ -69,7 +108,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         intent.putExtra("productos", productos.text.toString())
         intent.putExtra("latitud", latitud)
         intent.putExtra("longitud", longitud)
-        intent.putExtra("id", idservicio)
+        intent.putExtra("idServicio", idServicio)
         intent.putExtra("usuario", usuario)
         startActivity(intent)
     }

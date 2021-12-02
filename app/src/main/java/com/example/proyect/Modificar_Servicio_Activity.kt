@@ -26,7 +26,7 @@ class Modificar_Servicio_Activity : AppCompatActivity() {
     lateinit var productos : TextView
     lateinit var latitud : String
     lateinit var longitud : String
-    lateinit var id : String
+    lateinit var idServicio : String
 
     val activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             result ->
@@ -36,7 +36,6 @@ class Modificar_Servicio_Activity : AppCompatActivity() {
 
             latitud = data?.getStringExtra("latitud").toString()
             longitud = data?.getStringExtra("longitud").toString()
-            Log.wtf("DEBUG2", "${latitud}, ${longitud}")
         }
     }
 
@@ -53,7 +52,7 @@ class Modificar_Servicio_Activity : AppCompatActivity() {
         productos.text = intent.getStringExtra("productos")
         latitud = intent.getStringExtra("latitud")!!
         longitud = intent.getStringExtra("longitud")!!
-        id = intent.getStringExtra("id")!!
+        idServicio = intent.getStringExtra("idServicio")!!
 
     }
 
@@ -61,16 +60,17 @@ class Modificar_Servicio_Activity : AppCompatActivity() {
         if(nombre.text.toString().isEmpty() || informacion.text.toString().isEmpty() || productos.text.toString().isEmpty()){
             Toast.makeText(this, "Falta agregar uno o mas campos", Toast.LENGTH_SHORT).show();
             return
+        } else {
+            modificarDatos()
         }
-        modificarDatos()
     }
 
     fun modificarDatos() {
-        Firebase.firestore.collection("servicios").document(id).update("nombre", nombre.text.toString())
-        Firebase.firestore.collection("servicios").document(id).update("informacion servicio", informacion.text.toString())
-        Firebase.firestore.collection("servicios").document(id).update("productos", productos.text.toString())
-        Firebase.firestore.collection("servicios").document(id).update("latitud", latitud)
-        Firebase.firestore.collection("servicios").document(id).update("longitud", longitud)
+        Firebase.firestore.collection("servicios").document(idServicio).update("nombre", nombre.text.toString())
+        Firebase.firestore.collection("servicios").document(idServicio).update("informacion servicio", informacion.text.toString())
+        Firebase.firestore.collection("servicios").document(idServicio).update("productos", productos.text.toString())
+        Firebase.firestore.collection("servicios").document(idServicio).update("latitud", latitud)
+        Firebase.firestore.collection("servicios").document(idServicio).update("longitud", longitud)
 
         Toast.makeText(this, "Se ha modificado exitosamente", Toast.LENGTH_SHORT).show();
         finish()
