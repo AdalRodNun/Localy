@@ -6,9 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
+import com.facebook.share.Share
+import com.facebook.share.model.ShareContent
+import com.facebook.share.model.ShareHashtag
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -24,6 +28,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
     lateinit var usuario : String
     lateinit var idServicio : String
     lateinit var favoritoBoton : Button
+    lateinit var compartirBoton : ImageButton
     var bandera : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +41,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         editarBoton = findViewById(R.id.editButton)
         borrarBoton = findViewById(R.id.deleteButton)
         favoritoBoton = findViewById(R.id.favoritoBoton)
+        compartirBoton = findViewById(R.id.compartirButton)
 
         idServicio = intent.getStringExtra("id").toString()
 
@@ -224,5 +230,8 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             .addOnFailureListener {
                 Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
             }
+    }
+    fun compartir(v : View){
+
     }
 }

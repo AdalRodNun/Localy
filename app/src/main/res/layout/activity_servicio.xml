@@ -122,6 +122,7 @@
                 android:layout_height="61dp"
                 android:layout_marginTop="36dp"
                 android:background="#4CAF50"
+                android:onClick="compartir"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.122"
                 app:layout_constraintStart_toStartOf="parent"

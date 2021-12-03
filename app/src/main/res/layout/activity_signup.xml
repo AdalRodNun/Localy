@@ -6,34 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".SIGNUP_ACTIVITY">
 
-    <ImageButton
-        android:id="@+id/facebookButton"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="111dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
-        android:background="#00000000"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toStartOf="@+id/editButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_button"
-        tools:src="@drawable/facebook_logo_f_sqaure1" />
-
-    <ImageButton
-        android:id="@+id/googleButton"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="111dp"
-        android:background="#00000000"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_button"
-        tools:src="@drawable/googleg_standard_color_18" />
-
     <TextView
         android:id="@+id/signup_text_edit"
         android:layout_width="wrap_content"
@@ -110,4 +82,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_edit_text_signup"
         app:layout_constraintVertical_bias="0.164" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

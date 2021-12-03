@@ -5,9 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -17,12 +25,14 @@ class SIGNUP_ACTIVITY : AppCompatActivity() {
     lateinit var email : EditText
     lateinit var password : EditText
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
         email = findViewById(R.id.email_text_edit_signup)
         password = findViewById(R.id.password_edit_text_signup)
+
     }
 
     fun revisarCampos(v : View) {
@@ -52,7 +62,7 @@ class SIGNUP_ACTIVITY : AppCompatActivity() {
     }
 
     fun registroExtra() {
-        //hola :)
+
         val usuario = hashMapOf(
             "user id" to FirebaseAuth.getInstance().currentUser?.uid.toString(),
             "mis servicios" to arrayListOf<String>(),

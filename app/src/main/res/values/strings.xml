@@ -2,4 +2,6 @@
     <string name="app_name">proyect</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_activity_maps_visualizador">MapsActivityVisualizador</string>
+    <string name="facebook_app_id">647846769920338</string>
+    <string name="fb_login_protocol_scheme">fb647846769920338</string>
 </resources>
