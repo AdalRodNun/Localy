@@ -16,20 +16,21 @@ import com.facebook.share.model.ShareHashtag
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.lang.StringBuilder
 
 class SERVICIO_ACTIVITY : AppCompatActivity() {
     lateinit var infoServicio: TextView
-    lateinit var nombre : TextView
-    lateinit var productos : TextView
-    lateinit var latitud : String
-    lateinit var longitud : String
-    lateinit var editarBoton : AppCompatImageButton
-    lateinit var borrarBoton : AppCompatImageButton
-    lateinit var usuario : String
-    lateinit var idServicio : String
-    lateinit var favoritoBoton : Button
-    lateinit var compartirBoton : ImageButton
-    var bandera : Boolean = false
+    lateinit var nombre: TextView
+    lateinit var productos: TextView
+    lateinit var latitud: String
+    lateinit var longitud: String
+    lateinit var editarBoton: AppCompatImageButton
+    lateinit var borrarBoton: AppCompatImageButton
+    lateinit var usuario: String
+    lateinit var idServicio: String
+    lateinit var favoritoBoton: Button
+    lateinit var compartirBoton: ImageButton
+    var bandera: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +57,12 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         }
     }
 
-    fun cargarDatos(){
+    fun cargarDatos() {
         Firebase.firestore.collection("servicios")
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-                    if(documento.id == idServicio){
+                    if (documento.id == idServicio) {
                         infoServicio.text = documento.data["informacion servicio"].toString()
                         nombre.text = documento.data["nombre"].toString()
                         productos.text = documento.data["productos"].toString()
@@ -73,7 +74,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                     }
                 }
 
-                if(FirebaseAuth.getInstance().currentUser?.uid.toString() != usuario){
+                if (FirebaseAuth.getInstance().currentUser?.uid.toString() != usuario) {
                     editarBoton.visibility = View.GONE
                     borrarBoton.visibility = View.GONE
                 }
@@ -83,7 +84,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun borrarUsuarioID(view: View){
+    fun borrarUsuarioID(view: View) {
         var misServicios: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -91,7 +92,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-                    if(documento.data["user id"] == idUsuario) {
+                    if (documento.data["user id"] == idUsuario) {
                         misServicios = documento.data["mis servicios"] as ArrayList<String>
                         misServicios.remove(idServicio)
 
@@ -109,8 +110,8 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun borrarDeFavoritos(){
-        var serviciosFavoritos : ArrayList<String>
+    fun borrarDeFavoritos() {
+        var serviciosFavoritos: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         Firebase.firestore.collection("usuarios")
@@ -119,7 +120,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                 for (documento in it) {
                     serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
 
-                    if(serviciosFavoritos.contains(idServicio)){
+                    if (serviciosFavoritos.contains(idServicio)) {
                         serviciosFavoritos.remove(idServicio)
 
                         Firebase.firestore.collection("usuarios").document(documento.id).update(
@@ -147,7 +148,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun editar(view: View){
+    fun editar(view: View) {
         val intent = Intent(this, Modificar_Servicio_Activity::class.java)
         intent.putExtra("nombre", nombre.text.toString())
         intent.putExtra("informacion", infoServicio.text.toString())
@@ -159,7 +160,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun verMapa(view: View){
+    fun verMapa(view: View) {
         val intent = Intent(this, MapsActivityVisualizador::class.java)
 
         intent.putExtra("nombre", nombre.text.toString())
@@ -168,7 +169,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun cargarBoton(){
+    fun cargarBoton() {
         var serviciosFavoritos: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -176,8 +177,9 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-                    if(documento.data["user id"] == idUsuario) {
-                        serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
+                    if (documento.data["user id"] == idUsuario) {
+                        serviciosFavoritos =
+                            documento.data["servicios guardados"] as ArrayList<String>
 
                         if (serviciosFavoritos.contains(idServicio)) {
                             favoritoBoton.setText("Eliminar de favoritos")
@@ -186,7 +188,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                         }
                     }
 
-                    if(!bandera){
+                    if (!bandera) {
                         bandera = true
                     }
 
@@ -198,7 +200,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun agregarEliminarFavoritos(v : View){
+    fun agregarEliminarFavoritos(v: View) {
         var serviciosFavoritos: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -206,8 +208,9 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-                    if(documento.data["user id"] == idUsuario){
-                        serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
+                    if (documento.data["user id"] == idUsuario) {
+                        serviciosFavoritos =
+                            documento.data["servicios guardados"] as ArrayList<String>
                         if (!serviciosFavoritos.contains(idServicio)) {
                             serviciosFavoritos.add(idServicio)
                             favoritoBoton.setText("Eliminar de favoritos")
@@ -217,7 +220,11 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                             serviciosFavoritos.remove(idServicio)
                             favoritoBoton.setText("Añadir a favoritos")
 
-                            Toast.makeText(this, "Servicio eliminado de favoritos", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Servicio eliminado de favoritos",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         Firebase.firestore.collection("usuarios").document(documento.id).update(
@@ -231,7 +238,22 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                 Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
             }
     }
-    fun compartir(v : View){
 
+    fun compartir(v: View) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            val nombreservice = nombre.text
+            val infoservice = infoServicio.text
+            val texto = StringBuilder()
+            texto.append(nombreservice).append(", ").append(infoservice)
+            val salidatxt = texto.toString()
+            putExtra(Intent.EXTRA_TEXT, salidatxt)
+
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 }
+

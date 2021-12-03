@@ -68,8 +68,8 @@
 
             <Button
                 android:id="@+id/favoritoBoton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="87dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="36dp"
                 android:onClick="agregarEliminarFavoritos"
                 app:layout_constraintEnd_toEndOf="parent"
