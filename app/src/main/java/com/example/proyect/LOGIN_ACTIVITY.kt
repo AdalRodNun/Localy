@@ -47,7 +47,6 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
     var auth : FirebaseAuth ?= null
     var callbackManager = CallbackManager.Factory.create()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -55,7 +54,6 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
         email = findViewById(R.id.email_login_text_edit)
         password = findViewById(R.id.password_text_edit)
         facebook = findViewById(R.id.login_button)
-
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -66,18 +64,10 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         auth= FirebaseAuth.getInstance()
 
-
-
-
         facebook.setReadPermissions("email")
         facebook.setOnClickListener{
             facebooklogin()
         }
-
-
-
-
-
     }
 
     private fun facebooklogin() {
@@ -93,13 +83,10 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
             override fun onError(error: FacebookException?) {
 
             }
-
-
         })
     }
 
-
-    public fun google(v : View){
+    fun google(v : View){
         signIn()
     }
 
@@ -133,6 +120,7 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
             }
         }
     }
+
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         mAuth.signInWithCredential(credential)
@@ -145,7 +133,6 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
 
                     val intent = Intent(this, HOME_ACTIVITY::class.java)
                     startActivity(intent)
-
 
                 } else {
                     // If sign in fails, display a message to the user.
@@ -189,6 +176,7 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
         val currentUser = mAuth.currentUser
 
     }
+
     private fun handleFacebookAccessToken(token: AccessToken?) {
        Log.d("tag", "handleFacebookAccessToken:$token")
         val credential = FacebookAuthProvider.getCredential(token!!.token)
@@ -214,9 +202,6 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
                 }
             }
     }
-
-
-
 
     fun loginExtra() {
         var idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -253,7 +238,4 @@ class LOGIN_ACTIVITY : AppCompatActivity() {
                 Log.e("FIRESTORE Menu", "Error al leer usuario: ${it.message}")
             }
     }
-
-
-
-    }
+}

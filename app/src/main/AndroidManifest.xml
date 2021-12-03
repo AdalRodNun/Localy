@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyect">
         <activity
+            android:name=".Modificar_Productos_Activity"
+            android:exported="true" />
+        <activity
             android:name=".SERVICIOS_GUARDADOS_ACTIVITY"
             android:exported="true" />
         <activity

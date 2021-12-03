@@ -10,6 +10,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.facebook.share.Share
 import com.facebook.share.model.ShareContent
 import com.facebook.share.model.ShareHashtag
@@ -18,10 +20,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.lang.StringBuilder
 
-class SERVICIO_ACTIVITY : AppCompatActivity() {
+class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
+    lateinit var recyclerViewProductos: RecyclerView
+    lateinit var adapterProductos : Producto_Adapter
     lateinit var infoServicio: TextView
     lateinit var nombre: TextView
-    lateinit var productos: TextView
     lateinit var latitud: String
     lateinit var longitud: String
     lateinit var editarBoton: AppCompatImageButton
@@ -30,6 +33,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
     lateinit var idServicio: String
     lateinit var favoritoBoton: Button
     lateinit var compartirBoton: ImageButton
+    var productosData : ArrayList<Producto> = ArrayList()
     var bandera: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +42,10 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
 
         infoServicio = findViewById(R.id.info_text_1)
         nombre = findViewById(R.id.nombre_servicio_text)
-        productos = findViewById(R.id.productos_text)
         editarBoton = findViewById(R.id.editButton)
         borrarBoton = findViewById(R.id.deleteButton)
         favoritoBoton = findViewById(R.id.favoritoBoton)
+        recyclerViewProductos = findViewById(R.id.recyclerViewProductos)
         compartirBoton = findViewById(R.id.compartirButton)
 
         idServicio = intent.getStringExtra("id").toString()
@@ -57,7 +61,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         }
     }
 
-    fun cargarDatos() {
+    fun cargarDatos(){
         Firebase.firestore.collection("servicios")
             .get()
             .addOnSuccessListener {
@@ -65,7 +69,6 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                     if (documento.id == idServicio) {
                         infoServicio.text = documento.data["informacion servicio"].toString()
                         nombre.text = documento.data["nombre"].toString()
-                        productos.text = documento.data["productos"].toString()
                         latitud = documento.data["latitud"].toString()
                         longitud = documento.data["longitud"].toString()
                         usuario = documento.data["usuario"].toString()
@@ -84,7 +87,45 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun borrarUsuarioID(view: View) {
+    fun cargarProductos(){
+        productosData.clear()
+        var productosActuales : ArrayList<String>
+
+        Firebase.firestore.collection("servicios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(documento.id == idServicio){
+                        productosActuales = documento.data["productos"] as ArrayList<String>
+
+                        for(producto in productosActuales){
+                            productosData.add(Producto(producto))
+                            Log.d("FIREBASE", "Correctamente cargado")
+                            iniciarRecycler()
+                        }
+                        break
+                    }
+                }
+            }
+            .addOnFailureListener() {
+                Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
+            }
+    }
+
+    fun iniciarRecycler(){
+        adapterProductos = Producto_Adapter(productosData, this)
+        var llm = LinearLayoutManager(this)
+        llm.orientation = LinearLayoutManager.VERTICAL
+
+        recyclerViewProductos.layoutManager = llm
+        recyclerViewProductos.adapter = adapterProductos
+
+        if(!bandera){
+            bandera = true
+        }
+    }
+
+    fun borrarUsuarioID(view: View){
         var misServicios: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -110,8 +151,8 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun borrarDeFavoritos() {
-        var serviciosFavoritos: ArrayList<String>
+    fun borrarDeFavoritos(){
+        var serviciosFavoritos : ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         Firebase.firestore.collection("usuarios")
@@ -148,11 +189,10 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun editar(view: View) {
+    fun editar(view: View){
         val intent = Intent(this, Modificar_Servicio_Activity::class.java)
         intent.putExtra("nombre", nombre.text.toString())
         intent.putExtra("informacion", infoServicio.text.toString())
-        intent.putExtra("productos", productos.text.toString())
         intent.putExtra("latitud", latitud)
         intent.putExtra("longitud", longitud)
         intent.putExtra("idServicio", idServicio)
@@ -160,7 +200,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun verMapa(view: View) {
+    fun verMapa(view: View){
         val intent = Intent(this, MapsActivityVisualizador::class.java)
 
         intent.putExtra("nombre", nombre.text.toString())
@@ -169,7 +209,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun cargarBoton() {
+    fun cargarBoton(){
         var serviciosFavoritos: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -177,22 +217,17 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-                    if (documento.data["user id"] == idUsuario) {
-                        serviciosFavoritos =
-                            documento.data["servicios guardados"] as ArrayList<String>
+                    if(documento.data["user id"] == idUsuario) {
+                        serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
 
                         if (serviciosFavoritos.contains(idServicio)) {
                             favoritoBoton.setText("Eliminar de favoritos")
                         } else {
                             favoritoBoton.setText("Añadir a favoritos")
                         }
+                        cargarProductos()
+                        break
                     }
-
-                    if (!bandera) {
-                        bandera = true
-                    }
-
-                    break
                 }
             }
             .addOnFailureListener {
@@ -200,7 +235,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             }
     }
 
-    fun agregarEliminarFavoritos(v: View) {
+    fun agregarEliminarFavoritos(v : View){
         var serviciosFavoritos: ArrayList<String>
         val idUsuario = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
@@ -208,9 +243,8 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
             .get()
             .addOnSuccessListener {
                 for (documento in it) {
-                    if (documento.data["user id"] == idUsuario) {
-                        serviciosFavoritos =
-                            documento.data["servicios guardados"] as ArrayList<String>
+                    if(documento.data["user id"] == idUsuario){
+                        serviciosFavoritos = documento.data["servicios guardados"] as ArrayList<String>
                         if (!serviciosFavoritos.contains(idServicio)) {
                             serviciosFavoritos.add(idServicio)
                             favoritoBoton.setText("Eliminar de favoritos")
@@ -220,23 +254,22 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
                             serviciosFavoritos.remove(idServicio)
                             favoritoBoton.setText("Añadir a favoritos")
 
-                            Toast.makeText(
-                                this,
-                                "Servicio eliminado de favoritos",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this, "Servicio eliminado de favoritos", Toast.LENGTH_SHORT).show()
                         }
 
                         Firebase.firestore.collection("usuarios").document(documento.id).update(
                             mapOf("servicios guardados" to serviciosFavoritos)
                         )
+                        break
                     }
-                    break
                 }
             }
             .addOnFailureListener {
                 Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
             }
+    }
+
+    override fun onClick(row : View) {
     }
 
     fun compartir(v: View) {
@@ -256,4 +289,3 @@ class SERVICIO_ACTIVITY : AppCompatActivity() {
         startActivity(shareIntent)
     }
 }
-

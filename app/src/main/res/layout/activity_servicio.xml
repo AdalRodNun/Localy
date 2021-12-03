@@ -39,7 +39,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.241"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productos_text" />
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewProductos" />
 
             <TextView
                 android:id="@+id/servicios_text"
@@ -53,27 +53,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nombre_servicio_text" />
 
-            <EditText
-                android:id="@+id/productos_text"
-                android:layout_width="308dp"
-                android:layout_height="175dp"
-                android:layout_marginTop="12dp"
-                android:ems="10"
-                android:focusable="false"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/servicios_text" />
-
             <Button
                 android:id="@+id/favoritoBoton"
-                android:layout_width="87dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="36dp"
+                android:layout_width="215dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="40dp"
                 android:onClick="agregarEliminarFavoritos"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.123"
+                app:layout_constraintHorizontal_bias="0.209"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mapButton" />
 
@@ -140,6 +127,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/info_text_1"
                 app:srcCompat="@android:drawable/ic_menu_edit" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewProductos"
+                android:layout_width="298dp"
+                android:layout_height="167dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/servicios_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

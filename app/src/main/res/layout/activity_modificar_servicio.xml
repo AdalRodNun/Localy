@@ -50,12 +50,12 @@
                     android:id="@+id/modificarNombreServicio"
                     android:layout_width="316dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="32dp"
                     android:ems="10"
                     android:hint="Nombre"
                     android:inputType="textPersonName"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.505"
+                    app:layout_constraintHorizontal_bias="0.484"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
@@ -63,40 +63,39 @@
                     android:id="@+id/modificarInformacionServicio"
                     android:layout_width="316dp"
                     android:layout_height="99dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="32dp"
                     android:ems="10"
                     android:gravity="start|top"
                     android:hint="Información"
                     android:inputType="textMultiLine"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.484"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/modificarNombreServicio" />
-
-                <EditText
-                    android:id="@+id/modificarProductosServicio"
-                    android:layout_width="316dp"
-                    android:layout_height="124dp"
-                    android:layout_marginTop="36dp"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="Productos"
-                    android:inputType="textMultiLine"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.505"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/modificarInformacionServicio" />
 
                 <Button
                     android:id="@+id/button78"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="36dp"
                     android:onClick="seleccionarUbicacion"
                     android:text="Ubicacion en el mapa"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.242"
+                    app:layout_constraintHorizontal_bias="0.252"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/modificarProductosServicio" />
+                    app:layout_constraintTop_toBottomOf="@+id/modificarProductosButton" />
+
+                <Button
+                    android:id="@+id/modificarProductosButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:onClick="modificarProductos"
+                    android:text="Cambiar Productos"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.227"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/modificarInformacionServicio" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>

@@ -17,19 +17,16 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
-
 class Agregar_Servicio_Activity : AppCompatActivity() {
-
     lateinit var nombre : TextView
     lateinit var informacion : TextView
-    lateinit var productos : TextView
     lateinit var imagen : ImageView
     lateinit var imagenUri : Uri
     lateinit var buscarImagen : ActivityResultLauncher<String>
-    var imagenEmpty : Boolean = true
-    var coordEmpty : Boolean = true
     lateinit var latitud : String
     lateinit var longitud : String
+    var imagenEmpty : Boolean = true
+    var coordEmpty : Boolean = true
 
     val activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             result ->
@@ -50,7 +47,6 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
 
         nombre = findViewById(R.id.agregarNombreServicio)
         informacion = findViewById(R.id.agregarInformacionServicio)
-        productos = findViewById(R.id.agregarProductosServicio)
         imagen = findViewById(R.id.agregarImagenServicio)
 
         buscarImagen = registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -63,7 +59,7 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
     }
 
     fun checkServicio(view : View) {
-        if(nombre.text.toString().isEmpty() || informacion.text.toString().isEmpty() || productos.text.toString().isEmpty() || imagenEmpty || coordEmpty){
+        if(nombre.text.toString().isEmpty() || informacion.text.toString().isEmpty() || imagenEmpty || coordEmpty){
             Toast.makeText(this, "Falta agregar uno o mas campos", Toast.LENGTH_SHORT).show();
             return
         }
@@ -85,11 +81,13 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
     }
 
     fun registrarDatos() {
+        var productosData : ArrayList<String> = ArrayList()
+
         val servicio = hashMapOf(
             "nombre" to nombre.text.toString(),
             "informacion servicio" to informacion.text.toString(),
-            "productos" to productos.text.toString(),
             "usuario" to FirebaseAuth.getInstance().currentUser?.uid.toString(),
+            "productos" to productosData,
             "latitud" to latitud,
             "longitud" to longitud
         )
