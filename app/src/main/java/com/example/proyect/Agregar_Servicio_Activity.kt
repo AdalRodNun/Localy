@@ -25,6 +25,7 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
     lateinit var buscarImagen : ActivityResultLauncher<String>
     lateinit var latitud : String
     lateinit var longitud : String
+    lateinit var idServicioNueva : String
     var imagenEmpty : Boolean = true
     var coordEmpty : Boolean = true
 
@@ -99,6 +100,7 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
             .addOnSuccessListener {
 
                 Toast.makeText(this, "Servicio agregado", Toast.LENGTH_SHORT).show();
+                idServicioNueva = it.id
                 registroExtra(it.id)
                 Log.d("FIREBASE", "id: ${it.id}")
                 //finish
@@ -120,6 +122,10 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
             .addOnSuccessListener {
 
                 Log.d("FIREBASE", "Correctamente cargado")
+                val intent = Intent(this, Modificar_Productos_Activity::class.java)
+                intent.putExtra("idServicio", idServicioNueva)
+                startActivity(intent)
+
                 finish()
             }
             .addOnFailureListener {
