@@ -82,6 +82,7 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
 
     fun registrarDatos() {
         var productosData : ArrayList<String> = ArrayList()
+        var reseñasData : ArrayList<String> = ArrayList()
 
         val servicio = hashMapOf(
             "nombre" to nombre.text.toString(),
@@ -89,7 +90,8 @@ class Agregar_Servicio_Activity : AppCompatActivity() {
             "usuario" to FirebaseAuth.getInstance().currentUser?.uid.toString(),
             "productos" to productosData,
             "latitud" to latitud,
-            "longitud" to longitud
+            "longitud" to longitud,
+            "reseñas" to reseñasData
         )
 
         Firebase.firestore.collection("servicios")

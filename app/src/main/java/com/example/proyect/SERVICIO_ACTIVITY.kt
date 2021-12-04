@@ -22,7 +22,9 @@ import java.lang.StringBuilder
 
 class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
     lateinit var recyclerViewProductos: RecyclerView
+    lateinit var recyclerViewReseñas: RecyclerView
     lateinit var adapterProductos : Producto_Adapter
+    lateinit var adapterReseñas : Resena_Adapter
     lateinit var infoServicio: TextView
     lateinit var nombre: TextView
     lateinit var latitud: String
@@ -34,6 +36,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
     lateinit var favoritoBoton: Button
     lateinit var compartirBoton: ImageButton
     var productosData : ArrayList<Producto> = ArrayList()
+    var reseñasData : ArrayList<Reseña> = ArrayList()
     var bandera: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +49,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
         borrarBoton = findViewById(R.id.deleteButton)
         favoritoBoton = findViewById(R.id.favoritoBoton)
         recyclerViewProductos = findViewById(R.id.recyclerViewProductos)
+        recyclerViewReseñas = findViewById(R.id.recyclerViewReseñas)
         compartirBoton = findViewById(R.id.compartirButton)
 
         idServicio = intent.getStringExtra("id").toString()
@@ -101,7 +105,33 @@ class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
                         for(producto in productosActuales){
                             productosData.add(Producto(producto))
                             Log.d("FIREBASE", "Correctamente cargado")
-                            iniciarRecycler()
+                            iniciarRecyclerProductos()
+                        }
+                        cargarReseñas()
+                        break
+                    }
+                }
+            }
+            .addOnFailureListener() {
+                Log.e("FIRESTORE", "error al leer servicios: ${it.message}")
+            }
+    }
+
+    fun cargarReseñas(){
+        reseñasData.clear()
+        var reseñasActuales : ArrayList<String>
+
+        Firebase.firestore.collection("servicios")
+            .get()
+            .addOnSuccessListener {
+                for (documento in it) {
+                    if(documento.id == idServicio){
+                        reseñasActuales = documento.data["reseñas"] as ArrayList<String>
+
+                        for(reseña in reseñasActuales){
+                            reseñasData.add(Reseña(reseña))
+                            Log.d("FIREBASE", "Correctamente cargado")
+                            iniciarRecyclerReseñas()
                         }
                         break
                     }
@@ -112,7 +142,7 @@ class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
             }
     }
 
-    fun iniciarRecycler(){
+    fun iniciarRecyclerProductos(){
         adapterProductos = Producto_Adapter(productosData, this)
         var llm = LinearLayoutManager(this)
         llm.orientation = LinearLayoutManager.VERTICAL
@@ -123,6 +153,15 @@ class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
         if(!bandera){
             bandera = true
         }
+    }
+
+    fun iniciarRecyclerReseñas(){
+        adapterReseñas = Resena_Adapter(reseñasData, this)
+        var llm = LinearLayoutManager(this)
+        llm.orientation = LinearLayoutManager.VERTICAL
+
+        recyclerViewReseñas.layoutManager = llm
+        recyclerViewReseñas.adapter = adapterReseñas
     }
 
     fun borrarUsuarioID(view: View){
@@ -287,5 +326,11 @@ class SERVICIO_ACTIVITY : AppCompatActivity(),  View.OnClickListener  {
 
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
+    }
+
+    fun escribirReseña(v : View) {
+        val intent = Intent(this, EscribirResenaActivity::class.java)
+        intent.putExtra("idServicio", idServicio)
+        startActivity(intent)
     }
 }

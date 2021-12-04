@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_agregar_servicio.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_detalle_registro.xml" value="0.245018115942029" />
+        <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_escribir_resena.xml" value="0.264" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_home.xml" value="0.2" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_login.xml" value="0.245018115942029" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_main.xml" value="0.245018115942029" />
@@ -20,21 +21,10 @@
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_servicios_guardados.xml" value="0.21693840579710144" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/activity_signup.xml" value="0.264" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/producto_row.xml" value="0.24094202898550723" />
+        <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/resena_row.xml" value="0.4" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/row.xml" value="0.245018115942029" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/layout/servicio_producto_row.xml" value="0.24094202898550723" />
         <entry key="..\:/Users/adal_/AndroidStudioProjects/proyect.2/app/src/main/res/menu/popup_menu.xml" value="0.264" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_agregar_servicio.xml" value="0.21875" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_detalle_registro.xml" value="0.21875" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_home.xml" value="0.27395833333333336" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_login.xml" value="0.325" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_main.xml" value="0.21875" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_maps.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_maps_visualizador.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_mis_servicios.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_modificar_servicio.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_registro_servicios.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_servicio.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/inqui/Documents/Mobile/Localy/app/src/main/res/layout/activity_signup.xml" value="0.38697916666666665" />
       </map>
     </option>
   </component>

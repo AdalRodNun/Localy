@@ -20,6 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewReseñas"
+                android:layout_width="298dp"
+                android:layout_height="148dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
             <TextView
                 android:id="@+id/info_text_1"
                 android:layout_width="298dp"
@@ -55,12 +64,12 @@
 
             <Button
                 android:id="@+id/favoritoBoton"
-                android:layout_width="215dp"
+                android:layout_width="320dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="36dp"
                 android:onClick="agregarEliminarFavoritos"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.209"
+                app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mapButton" />
 
@@ -76,57 +85,63 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/deleteButton"
-                android:layout_width="76dp"
-                android:layout_height="61dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="31dp"
-                android:layout_marginEnd="46dp"
-                android:background="#D60909"
-                android:onClick="borrarUsuarioID"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editButton"
-                app:layout_constraintTop_toBottomOf="@+id/info_text_1"
-                app:srcCompat="@android:drawable/ic_menu_delete" />
-
-            <ImageButton
-                android:id="@+id/mapButton"
-                android:layout_width="76dp"
-                android:layout_height="61dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="31dp"
-                android:layout_marginEnd="50dp"
-                android:background="#000000"
-                android:onClick="verMapa"
-                app:layout_constraintEnd_toStartOf="@+id/editButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/info_text_1"
-                app:srcCompat="@android:drawable/ic_dialog_map" />
-
-            <ImageButton
                 android:id="@+id/compartirButton"
                 android:layout_width="76dp"
                 android:layout_height="61dp"
                 android:layout_marginTop="36dp"
+                android:layout_marginBottom="50dp"
                 android:background="#4CAF50"
                 android:onClick="compartir"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.122"
+                app:layout_constraintHorizontal_bias="0.134"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/favoritoBoton"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@android:drawable/ic_menu_share" />
 
             <ImageButton
                 android:id="@+id/editButton"
                 android:layout_width="76dp"
                 android:layout_height="61dp"
-                android:layout_marginTop="31dp"
+                android:layout_marginTop="36dp"
                 android:background="#E4CB48"
                 android:onClick="editar"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/info_text_1"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewReseñas"
                 app:srcCompat="@android:drawable/ic_menu_edit" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="76dp"
+                android:layout_height="61dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="46dp"
+                android:background="#D60909"
+                android:onClick="borrarUsuarioID"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.75"
+                app:layout_constraintStart_toEndOf="@+id/editButton"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewReseñas"
+                app:srcCompat="@android:drawable/ic_menu_delete" />
+
+            <ImageButton
+                android:id="@+id/mapButton"
+                android:layout_width="76dp"
+                android:layout_height="61dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="45dp"
+                android:background="#000000"
+                android:onClick="verMapa"
+                app:layout_constraintEnd_toStartOf="@+id/editButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewReseñas"
+                app:srcCompat="@android:drawable/ic_dialog_map" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewProductos"
@@ -136,6 +151,31 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/servicios_text" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Reseñas"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.112"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/info_text_1" />
+
+            <Button
+                android:id="@+id/resenaButton"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginStart="78dp"
+                android:layout_marginTop="44dp"
+                android:onClick="escribirReseña"
+                android:text="Escribir Reseña"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/compartirButton"
+                app:layout_constraintTop_toBottomOf="@+id/favoritoBoton" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

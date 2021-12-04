@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CBB697"
+    android:background="#FFFFFF"
     tools:context=".HOME_ACTIVITY">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewServicios"
-        android:layout_width="409dp"
-        android:layout_height="591dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="385dp"
+        android:layout_height="420dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.615"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_bar" />
 
@@ -21,7 +21,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Servicios"
+        android:text="LOCALY"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
